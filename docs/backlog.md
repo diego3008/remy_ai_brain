@@ -30,16 +30,16 @@ Run one slice at a time and stop for review after each.
 
 ---
 
-## B-2 Assistant ID default, `doing`
+## B-2 Assistant ID default, `done`
 
 **Why:** remy_api defaulted `LANGGRAPH_ASSISTANT_ID` to `agent`, but remy_ai registers the graph as `main_graph`. Without an override, no Telegram message got a reply. **This one blocks the working flow**, so it is not hardening.
-**Repo:** remy_api, branch `diego3008/fix-assistant-id`, commit `c80054f` (local only)
+**Repo:** remy_api, PR #4 merged 2026-11-18 (`f6f3b6b`)
 
 | Slice | Observable behavior when done | Status |
 |---|---|---|
-| B-2.1 Default | `Settings().LANGGRAPH_ASSISTANT_ID == "main_graph"`. Test added, 7 tests pass | done (committed, not pushed) |
-| B-2.2 Ship it | Branch pushed, PR merged, and the real `.env` has no `LANGGRAPH_ASSISTANT_ID=agent` override | todo |
-| B-2.3 Docs | The "assistant ID mismatch" notes in hippocamp's `AGENTS.md` (the connection section and Known gaps) are removed or updated | todo |
+| B-2.1 Default | `Settings().LANGGRAPH_ASSISTANT_ID == "main_graph"`. Test added, 7 tests pass | done |
+| B-2.2 Ship it | PR merged, and Diego's real `.env` already sets `LANGGRAPH_ASSISTANT_ID=main_graph` (confirmed by Diego 2026-11-18) | done |
+| B-2.3 Docs | The "assistant ID mismatch" notes in hippocamp's `AGENTS.md` are updated | done |
 
 ---
 

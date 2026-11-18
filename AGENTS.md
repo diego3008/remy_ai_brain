@@ -29,8 +29,8 @@ You know how each project is structured, which libraries they use, they architec
 Both use **Python 3.14** and **uv** (`uv.lock`, `.python-version`), and keep secrets in an untracked `.env`.
 GitHub owner: `diego3008`. Branch names are `feature/<name>` or `diego3008/<name>`, and work merges through PRs.
 
-> Snapshot taken 2026-11-17. remy_ai at `9f1eae5` (`feature/api-retrieval`, same as `main`). remy_api at
-> `f670bea` (`origin/main`, PR #3 merged). The local `main` checkout in `~/remy_api` was behind `origin/main`
+> Snapshot taken 2026-11-17, remy_api updated 2026-11-18. remy_ai at `9f1eae5` (`feature/api-retrieval`, same as `main`).
+> remy_api at `f6f3b6b` (`origin/main`, PR #4 merged: assistant ID default). The local `main` checkout in `~/remy_api` was behind `origin/main`
 > (at `e32d274`), so pull before you work. Check `git log` before relying on the details below.
 
 ---
@@ -64,9 +64,8 @@ Telegram user
 - Planned direction: remy_ai gets **tools that call remy_api's REST endpoints** (`/api/v1/...`) to read menus and
   create customers and orders. `Order.thread_id` already exists to link an order to its LangGraph thread, and
   remy_ai's `src/helpers/url_querystring.py` (builds a URL with query params from a model) is there for this.
-- ⚠️ Watch the assistant ID: remy_api defaults to `LANGGRAPH_ASSISTANT_ID="agent"`, but remy_ai's `langgraph.json`
-  registers the graph as **`main_graph`**. For runs to work, remy_api's `.env` must set `LANGGRAPH_ASSISTANT_ID=main_graph`,
-  or the graph key must change.
+- Assistant ID: remy_api's `LANGGRAPH_ASSISTANT_ID` defaults to **`main_graph`** (PR #4), which matches the graph key in
+  remy_ai's `langgraph.json`. Keep the two in sync, and make sure no `.env` overrides it with an old value like `agent`.
 
 ---
 
@@ -299,7 +298,6 @@ uv run pytest                       # SQLite by default; TEST_DATABASE_URL for P
 ---
 
 ## Known gaps & gotchas (verify before relying on them)
-- **Assistant ID mismatch**: remy_api defaults to `"agent"`, but remy_ai's graph is `"main_graph"` (see above).
 - **`TELEGRAM_WEBHOOK_SECRET`** is loaded but never passed to `set_webhook(secret_token=...)` or checked against the
   `X-Telegram-Bot-Api-Secret-Token` header, so anyone can post to the webhook.
 - `agent_client._get_thread_id(chat_id: int)` receives a **str** chat_id from `IncomingMessage`; thread metadata stores strings.
